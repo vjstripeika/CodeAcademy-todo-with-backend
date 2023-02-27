@@ -1,6 +1,7 @@
 import { Box, Typography, TextField, Button } from "@mui/material";
+import { postTodo } from "../services/postTodo";
 
-export const TodoForm = () => {
+export const TodoForm = ({ onSubmit, onClose }) => {
   return (
     <Box display="flex" flexDirection="column" gap={3}>
       <Typography variant="h4">Add new Todo</Typography>
@@ -11,10 +12,15 @@ export const TodoForm = () => {
           const todo = {
             completed: false,
           };
+
           for (let [name, value] of formData.entries()) {
             todo[name] = value;
           }
-          console.log(todo);
+
+          postTodo(todo).then(() => {
+            if (onSubmit) onSubmit();
+            if (onClose) onClose();
+          });
         }}
       >
         <Box display="flex" flexDirection="column" gap={3}>

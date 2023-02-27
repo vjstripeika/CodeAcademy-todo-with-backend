@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 import CssBaseline from "@mui/material/CssBaseline";
 import Container from "@mui/material/Container";
 
@@ -8,24 +6,20 @@ import { TodoCard } from "./components/TodoCard";
 import { TodoForm } from "./components/TodoForm";
 import { AddNewTodo } from "./components/AddNewTodo";
 
-import { getList } from "./services/getList";
+import { useModal } from "./hooks/useModal";
+import { useList } from "./hooks/useList";
 
 function App() {
-  const [list, setList] = useState([]);
-
-  useEffect(() => {
-    getList().then((data) => {
-      setList(data.documents);
-    });
-  }, []);
+  const { list, reloadData } = useList();
+  const { openModal, open, close } = useModal();
 
   return (
     <div className="App">
       <CssBaseline />
       <Container maxWidth="sm">
         <Heading />
-        <AddNewTodo>
-          <TodoForm />
+        <AddNewTodo onOpen={open} onClose={close} isOpen={openModal}>
+          <TodoForm onSubmit={reloadData} onClose={close} />
         </AddNewTodo>
         {list.map((item) => (
           <TodoCard
@@ -33,6 +27,7 @@ function App() {
             id={item._id}
             title={item.title}
             description={item.description}
+            onDelete={reloadData}
           />
         ))}
       </Container>
