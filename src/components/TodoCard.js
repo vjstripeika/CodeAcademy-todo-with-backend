@@ -15,15 +15,16 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { useDelete } from "../hooks/useDelete";
 import { useUpdate } from "../hooks/useUpdate";
 
-export const TodoCard = ({ title, description, id, onDelete, completed }) => {
+export const TodoCard = ({ title, description, id, onReload, completed }) => {
   const { openDeleteDialog, closeDeleteDialog, handleDelete, isOpen } =
-    useDelete(id, onDelete);
+    useDelete(id, onReload);
 
   const { onComplete, onIncomplete } = useUpdate({
     id,
     title,
     description,
     completed,
+    onReload,
   });
 
   return (

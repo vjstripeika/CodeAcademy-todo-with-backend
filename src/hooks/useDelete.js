@@ -12,11 +12,10 @@ export const useDelete = (id, onDelete) => {
     setOpen(false);
   };
 
-  const handleDelete = () => {
-    deleteTodo(id).then(() => {
-      if (onDelete)
-        onDelete();
-    });
+  const handleDelete = async () => {
+    await deleteTodo(id);
+
+    onDelete?.();
   };
 
   return {

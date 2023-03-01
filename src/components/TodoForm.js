@@ -6,7 +6,7 @@ export const TodoForm = ({ onSubmit, onClose }) => {
     <Box display="flex" flexDirection="column" gap={3}>
       <Typography variant="h4">Add new Todo</Typography>
       <form
-        onSubmit={(e) => {
+        onSubmit={async (e) => {
           e.preventDefault();
           const formData = new FormData(e.target);
           const todo = {
@@ -17,10 +17,10 @@ export const TodoForm = ({ onSubmit, onClose }) => {
             todo[name] = value;
           }
 
-          postTodo(todo).then(() => {
-            if (onSubmit) onSubmit();
-            if (onClose) onClose();
-          });
+          await postTodo(todo);
+          
+          onSubmit?.();
+          onClose?.();
         }}
       >
         <Box display="flex" flexDirection="column" gap={3}>

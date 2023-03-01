@@ -7,4 +7,6 @@ export const deleteTodo = (id) =>
     body: JSON.stringify({
       _id: id,
     }),
-  }).then((response) => response.json());
+  })
+    .then((response) => response.json())
+    .catch(console.error);

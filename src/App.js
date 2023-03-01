@@ -37,7 +37,7 @@ function App() {
               title={item.title}
               completed={item.completed}
               description={item.description}
-              onDelete={reloadData}
+              onReload={reloadData}
             />
           ))
         )}

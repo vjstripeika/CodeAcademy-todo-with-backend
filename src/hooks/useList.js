@@ -5,21 +5,16 @@ export const useList = () => {
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
+  const handleLoad = async () => {
     setLoading(true);
-    getList().then((data) => {
-      setLoading(false);
-      setList(data.documents);
-    });
-  }, []);
-
-  const reloadData = () => {
-    setLoading(true);
-    getList().then((data) => {
-      setLoading(false);
-      setList(data.documents);
-    });
+    const data = await getList();
+    setLoading(false);
+    setList(data.documents);
   };
 
-  return { list, reloadData, loading };
+  useEffect(() => {
+    handleLoad();
+  }, []);
+
+  return { list, reloadData: handleLoad, loading };
 };

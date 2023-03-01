@@ -1,12 +1,14 @@
 import { updateTodo } from "../services/updateTodo";
 
-export const useUpdate = ({ id, title, description, completed }) => {
-  const onComplete = () => {
-    updateTodo({ _id: id, title, description, completed: true });
+export const useUpdate = ({ id, title, description, completed, onReload }) => {
+  const onComplete = async () => {
+    await updateTodo({ _id: id, title, description, completed: true });
+    onReload();
   };
 
-  const onIncomplete = () => {
-    updateTodo({ _id: id, title, description, completed: false });
+  const onIncomplete = async () => {
+    await updateTodo({ _id: id, title, description, completed: false });
+    onReload();
   };
 
   return { onComplete, onIncomplete };
