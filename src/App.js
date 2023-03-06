@@ -1,3 +1,4 @@
+import { Fragment, useState } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Container from "@mui/material/Container";
 
@@ -6,23 +7,40 @@ import { TodoCard } from "./components/TodoCard";
 import { TodoForm } from "./components/TodoForm";
 import { AddNewTodo } from "./components/AddNewTodo";
 import { TodoSkeleton } from "./components/TodoSkeleton";
+import { TodoModal } from "./components/TodoModal";
 
 import { useModal } from "./hooks/useModal";
 import { useList } from "./hooks/useList";
-import { Fragment } from "react";
 
 function App() {
   const { list, reloadData, loading } = useList();
-  const { openModal, open, close } = useModal();
+  const { open, onOpen, onClose } = useModal();
+  const [editData, setEditData] = useState(null);
 
   return (
     <div className="App">
       <CssBaseline />
       <Container maxWidth="sm">
         <Heading />
-        <AddNewTodo onOpen={open} onClose={close} isOpen={openModal}>
-          <TodoForm onSubmit={reloadData} onClose={close} />
-        </AddNewTodo>
+        <AddNewTodo onOpen={onOpen} />
+
+        <TodoModal
+          open={open}
+          onClose={() => {
+            onClose();
+            setEditData(null);
+          }}
+        >
+          <TodoForm
+            onClose={() => {
+              onClose();
+              reloadData();
+              setEditData(null);
+            }}
+            editData={editData}
+          />
+        </TodoModal>
+
         {loading ? (
           <Fragment>
             <TodoSkeleton />
@@ -38,6 +56,10 @@ function App() {
               completed={item.completed}
               description={item.description}
               onReload={reloadData}
+              onEdit={() => {
+                onOpen();
+                setEditData(item);
+              }}
             />
           ))
         )}

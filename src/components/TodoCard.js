@@ -6,6 +6,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
+import EditIcon from "@mui/icons-material/Edit";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Dialog from "@mui/material/Dialog";
@@ -15,7 +16,14 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { useDelete } from "../hooks/useDelete";
 import { useUpdate } from "../hooks/useUpdate";
 
-export const TodoCard = ({ title, description, id, onReload, completed }) => {
+export const TodoCard = ({
+  title,
+  description,
+  id,
+  onReload,
+  onEdit,
+  completed,
+}) => {
   const { openDeleteDialog, closeDeleteDialog, handleDelete, isOpen } =
     useDelete(id, onReload);
 
@@ -72,6 +80,15 @@ export const TodoCard = ({ title, description, id, onReload, completed }) => {
             <Button
               size="small"
               variant="contained"
+              color="secondary"
+              startIcon={<EditIcon />}
+              onClick={onEdit}
+            >
+              Edit
+            </Button>
+            <Button
+              size="small"
+              variant="contained"
               color="error"
               startIcon={<DeleteIcon />}
               onClick={openDeleteDialog}
@@ -79,7 +96,6 @@ export const TodoCard = ({ title, description, id, onReload, completed }) => {
               Delete
             </Button>
           </Stack>
-
           <Dialog open={isOpen} onClose={closeDeleteDialog}>
             <DialogTitle>
               Are you sure you want to delete "{title}"?
