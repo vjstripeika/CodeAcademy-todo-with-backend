@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { deleteTodo } from "../services/deleteTodo";
 
-export const useDelete = (id, onDelete) => {
+export const useDelete = (id, onDelete, onError) => {
   const [open, setOpen] = useState(false);
 
   const openDeleteDialog = () => {
@@ -13,9 +13,13 @@ export const useDelete = (id, onDelete) => {
   };
 
   const handleDelete = async () => {
-    await deleteTodo(id);
-
-    onDelete?.();
+    try {
+      await deleteTodo(id);
+      onDelete?.();
+    } catch (e) {
+      onError();
+    }
+    closeDeleteDialog();
   };
 
   return {

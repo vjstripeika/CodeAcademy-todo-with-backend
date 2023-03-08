@@ -22,10 +22,15 @@ export const TodoCard = ({
   id,
   onReload,
   onEdit,
+  onError,
   completed,
 }) => {
+  const handleDeleteError = () => {
+    onError(`Could not delete the task by the name of "${title}".`);
+  };
+
   const { openDeleteDialog, closeDeleteDialog, handleDelete, isOpen } =
-    useDelete(id, onReload);
+    useDelete(id, onReload, handleDeleteError);
 
   const { onComplete, onIncomplete } = useUpdate({
     id,
@@ -33,6 +38,7 @@ export const TodoCard = ({
     description,
     completed,
     onReload,
+    onError,
   });
 
   return (

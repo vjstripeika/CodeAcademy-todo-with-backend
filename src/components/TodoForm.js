@@ -1,10 +1,12 @@
-import { Box, Typography, TextField, Button } from "@mui/material";
+import { useState } from "react";
+import { Box, Typography, TextField, Button, Alert } from "@mui/material";
 import { postTodo } from "../services/postTodo";
 import { updateTodo } from "../services/updateTodo";
 
 import { useForm } from "react-hook-form";
 
 export const TodoForm = ({ onClose, editData }) => {
+  const [error, setError] = useState();
   const { register, handleSubmit } = useForm({
     defaultValues: editData || {
       title: "",
@@ -18,14 +20,21 @@ export const TodoForm = ({ onClose, editData }) => {
       <Typography variant="h4">
         {editData ? "Edit Todo" : "Add Todo"}
       </Typography>
+
+      {error && <Alert severity="error">{error}</Alert>}
+
       <form
         onSubmit={handleSubmit(async (data) => {
-          if (editData) {
-            await updateTodo(data);
-          } else {
-            await postTodo(data);
+          try {
+            if (editData) {
+              await updateTodo(data);
+            } else {
+              await postTodo(data);
+            }
+            onClose?.();
+          } catch (_) {
+            setError("Could not save Todo. Please try saving again.");
           }
-          onClose?.();
         })}
       >
         <Box display="flex" flexDirection="column" gap={3}>
