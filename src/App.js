@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Container from "@mui/material/Container";
 import Alert from "@mui/material/Alert";
@@ -22,8 +22,20 @@ function App() {
   const [listErrors, setListErrors] = useState([]);
 
   const addListError = (errorMessage) => {
-    setListErrors([...listErrors, errorMessage]);
+    setListErrors((currentListErrors) => [...currentListErrors, errorMessage]);
   };
+
+  useEffect(() => {
+    if (!listErrors.length) {
+      return;
+    }
+
+    const clearFirstError = () => {
+      setListErrors((currentListErrors) => currentListErrors.slice(1));
+    };
+
+    setTimeout(clearFirstError, 10 * 1000);
+  }, [listErrors]);
 
   return (
     <div className="App">
@@ -56,7 +68,7 @@ function App() {
         )}
 
         {listErrors.length > 0 &&
-          listErrors.map((errorMessage, i) => (
+          listErrors.slice(-3).map((errorMessage, i) => (
             <Box marginBottom={2} key={errorMessage + i}>
               <Alert severity="error">{errorMessage}</Alert>
             </Box>

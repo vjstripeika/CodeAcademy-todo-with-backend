@@ -1,9 +1,6 @@
 import { updateTodo } from "../services/updateTodo";
 
 export const useUpdate = ({ id, title, description, onReload, onError }) => {
-
-  console.log("useUpdate", id, title, description, onReload, onError)
-  
   const onComplete = async () => {
     try {
       await updateTodo({ _id: id, title, description, completed: true });
