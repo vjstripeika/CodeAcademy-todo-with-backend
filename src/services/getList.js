@@ -1,5 +1,5 @@
+import { LIST } from "../utils/routes";
+
 export const getList = () => {
-  return fetch(
-    "https://codeacademy-todo.vercel.app/api/list?user=vytautasjonas"
-  ).then((response) => response.json());
+  return fetch(LIST).then((response) => response.json());
 };

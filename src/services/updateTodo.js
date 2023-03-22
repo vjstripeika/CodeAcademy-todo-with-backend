@@ -1,6 +1,8 @@
+import { TODO } from "../utils/routes";
+
 export const updateTodo = (todo) => {
   return fetch(
-    "https://codeacademy-todo.vercel.app/api/todo?user=vytautasjonas",
+    TODO,
     {
       method: "PUT",
       headers: {
