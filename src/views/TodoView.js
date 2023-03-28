@@ -11,8 +11,9 @@ import { TodoModal } from "../components/TodoModal";
 
 import { useModal } from "../hooks/useModal";
 import { useList } from "../hooks/useList";
+import { Button } from "@mui/material";
 
-export function TodoView() {
+export function TodoView({ onLogout }) {
   const { list, reloadData, loading, error: loadingError } = useList();
   const { open, onOpen, onClose } = useModal();
   const [editData, setEditData] = useState(null);
@@ -37,61 +38,64 @@ export function TodoView() {
 
   return (
     <>
-        <Heading title="Todo List" />
-        <AddNewTodo onOpen={onOpen} />
-        <TodoModal
-          open={open}
+      <Heading title="Todo List" />
+      <Button variant="text" size="sm" color="error" onClick={onLogout}>
+        Logout
+      </Button>
+      <AddNewTodo onOpen={onOpen} />
+      <TodoModal
+        open={open}
+        onClose={() => {
+          onClose();
+          setEditData(null);
+        }}
+      >
+        <TodoForm
           onClose={() => {
             onClose();
+            reloadData();
             setEditData(null);
           }}
-        >
-          <TodoForm
-            onClose={() => {
-              onClose();
-              reloadData();
-              setEditData(null);
-            }}
-            editData={editData}
-          />
-        </TodoModal>
+          editData={editData}
+        />
+      </TodoModal>
 
-        {loadingError && (
-          <Box marginBottom={2}>
-            <Alert severity="error">{loadingError}</Alert>
+      {loadingError && (
+        <Box marginBottom={2}>
+          <Alert severity="error">{loadingError}</Alert>
+        </Box>
+      )}
+
+      {listErrors.length > 0 &&
+        listErrors.slice(-3).map((errorMessage, i) => (
+          <Box marginBottom={2} key={errorMessage + i}>
+            <Alert severity="error">{errorMessage}</Alert>
           </Box>
-        )}
+        ))}
 
-        {listErrors.length > 0 &&
-          listErrors.slice(-3).map((errorMessage, i) => (
-            <Box marginBottom={2} key={errorMessage + i}>
-              <Alert severity="error">{errorMessage}</Alert>
-            </Box>
-          ))}
-
-        {loading ? (
-          <Fragment>
-            <TodoSkeleton />
-            <TodoSkeleton />
-            <TodoSkeleton />
-          </Fragment>
-        ) : (
-          list.map((item) => (
-            <TodoCard
-              key={item._id}
-              id={item._id}
-              title={item.title}
-              completed={item.completed}
-              description={item.description}
-              onReload={reloadData}
-              onEdit={() => {
-                onOpen();
-                setEditData(item);
-              }}
-              onError={addListError}
-            />
-          ))
-        )}
-      </>
+      {loading ? (
+        <Fragment>
+          <TodoSkeleton />
+          <TodoSkeleton />
+          <TodoSkeleton />
+        </Fragment>
+      ) : (
+        list.map((item) => (
+          <TodoCard
+            key={item._id}
+            id={item._id}
+            title={item.title}
+            completed={item.completed}
+            description={item.description}
+            onReload={reloadData}
+            onEdit={() => {
+              onOpen();
+              setEditData(item);
+            }}
+            onError={addListError}
+          />
+        ))
+      )}
+    </>
   );
 }

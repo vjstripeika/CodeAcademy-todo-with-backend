@@ -1,7 +1,7 @@
-import { REGISTER } from "../utils/routes";
+import { LOGIN } from "../utils/routes";
 
-export const registerUser = (user) => {
-  return fetch(REGISTER, {
+export const loginUser = (user) => {
+  return fetch(LOGIN, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
